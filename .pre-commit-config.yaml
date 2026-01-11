@@ -1,0 +1,14 @@
+repos:
+  - repo: https://github.com/psf/black
+    rev: 24.4.2 # Use a specific version number
+    hooks:
+      - id: black
+        # 'black' is a formatter, so it will modify files in-place.
+        # It's recommended to run 'black' first before 'flake8'.
+
+  - repo: https://github.com/PyCQA/flake8
+    rev: 7.0.0 # Use a specific version number
+    hooks:
+      - id: flake8
+        # 'flake8' is a linter. It will not modify your files.
+        # It will only check for issues and prevent the commit if they are found.

@@ -1,0 +1,6 @@
+[flake8]
+max-line-length = 79
+extend-ignore = E203, W503, E501
+per-file-ignores =
+    *node_modules* : E,F,W
+    *alembic* : E,F,W

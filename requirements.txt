@@ -1,0 +1,7 @@
+requests>=2.0
+beautifulsoup4>=4.9
+faiss-cpu
+numpy
+tldextract
+validators
+streamlit
