@@ -17,7 +17,7 @@ SYSTEM_PROMPT = """
         Follow these rules strictly:
         1. If there is no relevant context and no previous conversation, respond with:
             "The answer is not available on the provided website."
-        2. If there is relevant context, use it to answer the question.
+        2. If there is relevant context, use it to answer the question. But do not mention that you are using the context.
         3. If there is a previous conversation, incorporate it to provide a coherent and context-aware response.
 """
 FAILED_CONTEXT_RETRIEVAL = "The answer is not available on the provided website."
