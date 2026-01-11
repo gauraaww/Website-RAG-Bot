@@ -5,3 +5,4 @@ numpy
 tldextract
 validators
 streamlit
+google-genai
