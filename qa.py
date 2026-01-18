@@ -1,6 +1,7 @@
 from embeddings import Embedder, FaissStore
 from cleaner import Cleaner
 from crawler import Crawler
+from chunker import Chunker
 from constants import (
     API_KEY,
     EMBEDDNG_DIM,
@@ -18,6 +19,7 @@ class QAEngine:
     def __init__(self):
         self.crawler = Crawler()
         self.cleaner = Cleaner()
+        self.chunker = Chunker()
         self.embedder = Embedder(model_name=EMBEDDING_MODEL)
         self.faiss_store = FaissStore(EMBEDDNG_DIM)
         self.client = genai.Client(api_key=API_KEY)
@@ -37,18 +39,7 @@ class QAEngine:
         if not texts:
             raise ValueError("No usable content extracted from site")
 
-        # chunk by simple paragraph chunks
-        chunks = []
-        for text in texts:
-            paras = text.split("\n")
-            for para in paras:
-                if len(para) > 50:
-                    # further split long paragraphs
-                    if len(para) > 2000:
-                        for i in range(0, len(para), 1500):
-                            chunks.append(para[i : i + 1500])
-                    else:
-                        chunks.append(para)
+        chunks = self.chunker.chunk_text(texts=texts)
 
         # create embedding
         embeddings = self.embedder.embed_texts(texts=chunks)
@@ -58,7 +49,7 @@ class QAEngine:
         self.faiss_store.save()
         return len(chunks)
 
-    def fetch_context(self, question, k=TOP_K):
+    def retrieve_chunks(self, question, k=TOP_K):
         self.faiss_store.load()
         if not self.faiss_store.texts:
             raise ValueError("No index loaded. Run ingest first.")
@@ -97,7 +88,7 @@ class QAEngine:
         return response.text.strip()
 
     def generate_response(self, question, previous_conversation=[]):
-        retrieved = self.fetch_context(question)
+        retrieved = self.retrieve_chunks(question)
         recent_conversation = self.get_recent_conversation(previous_conversation)
         print("recent conversation:", recent_conversation)
 
