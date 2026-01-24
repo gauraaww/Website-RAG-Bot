@@ -35,7 +35,7 @@ class Embedder:
 
 
 class FaissStore:
-    def __init__(self, dim, index_path=None):
+    def __init__(self, dim):
         self.dim = dim
         self.index = faiss.IndexFlatIP(dim)
         self.texts = []
